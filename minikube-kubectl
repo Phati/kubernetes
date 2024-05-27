@@ -1,0 +1,67 @@
+//Start kubernetes locally
+minikube start --driver=docker
+
+minikube status 
+
+/* 
+*****output*****
+minikube
+type: Control Plane
+host: Running
+kubelet: Running
+apiserver: Running
+kubeconfig: Configured
+*/
+
+//check cluster info
+kubectl cluster-info
+
+/* 
+*****output*****
+Kubernetes control plane is running at https://127.0.0.1:62068
+CoreDNS is running at https://127.0.0.1:62068/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+*/
+
+kubectl get nodes
+/* 
+*****output*****
+NAME       STATUS   ROLES           AGE   VERSION
+minikube   Ready    control-plane   86m   v1.30.0
+*/
+
+//before building the docker image connect to docker daemon of minikube
+minikube docker-env
+//and run the last command , now you are connected to docker daemon of minikube
+
+//now build the docker image of your spring boot application
+docker build -t spring-boot-k8s-demo:1.0 .
+
+//list the images
+docker images
+
+
+//Create K8s deployment
+kubectl create deployment spring-boot-k8s --image=spring-boot-k8s-demo:1.0  --port=8080
+
+//check deployment
+kubectl get deployment
+
+//get description
+kubectl describe deployment spring-boot-k8s
+
+//get pods
+kubectl get pods
+
+//check logs on pod
+kubectl logs name_of_pod
+
+
+//expose deployment through a service 
+kubectl expose deployment deployment_name --type=NodePort
+
+kubectl get service
+
+//get the service url 
+minikube service service_name --url
