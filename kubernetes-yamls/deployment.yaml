@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bill-pay-application
+  labels:
+    app: bill-pay-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bill-pay-app
+  template:
+    metadata:
+      labels:
+        app: bill-pay-app
+    spec:
+      containers:
+      - name: bill-pay-app
+        image: phatijava/bill-pay-app:4.0.1
+        imagePullPolicy: Always
+        ports:
+          - name: http
+            containerPort: 8080
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: http
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: credit-card-application
+  labels:
+    app: credit-card-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: credit-card-app
+  template:
+    metadata:
+      labels:
+        app: credit-card-app
+    spec:
+      containers:
+      - name: credit-credit-app
+        image: phatijava/credit-card-app:5.0.1
+        imagePullPolicy: Always
+        ports:
+          - name: http
+            containerPort: 8080
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: http
