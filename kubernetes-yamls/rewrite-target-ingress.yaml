@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rewrite-target-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /billpay(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: bill-pay-service
+            port:
+              number: 80
+      - path: /credit-card(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: credit-card-service
+            port:
+              number: 80
