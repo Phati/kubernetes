@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bill-pay-service
+spec:
+  type: ClusterIP
+  selector:
+    app: bill-pay-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: credit-card-service
+spec:
+  type: ClusterIP
+  selector:
+    app: credit-card-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
